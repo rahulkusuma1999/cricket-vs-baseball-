@@ -22,6 +22,10 @@ path = Path('data/pics')
 dest = path/folder
 dest.mkdir(parents=True, exist_ok=True)
 
+download_images(path/file, dest, max_pics=200)
+
+
+
 folder = 'cricket'
 file = 'download (6)'
 
@@ -31,7 +35,10 @@ dest.mkdir(parents=True, exist_ok=True)
 
 download_images(path/file, dest, max_pics=200)
 
+
 classes = ['baseball','cricket']
+
+
 
 for c in classes:
     print(c)
@@ -45,7 +52,9 @@ np.random.seed(42)
 data = ImageDataBunch.from_folder(path, train=".", valid_pct=0.2,
         ds_tfms=get_transforms(), size=224, num_workers=4).normalize(imagenet_stats)
 
+
 data.show_batch(rows=12, figsize=(7,8))
+
 
 def conv(ni,nf):
   return nn.Conv2d(ni,nf,kernel_size=3,stride=2,padding=1)
@@ -81,11 +90,8 @@ model=nn.Sequential(
    
  
     Flatten(),
-    #nn.Linear(256,128),
-    #nn.Linear(128,32),
-    #nn.Linear(32,2) 
-    #nn.Softmax(), # remove (1,1) grid  
-               # this flattens the 3 dim into single vector of 10 outputs 
+               # remove (1,1) grid  
+               # this flattens the 3 dim into single vector of 2 outputs 
 
 )
 
@@ -96,42 +102,34 @@ print(learn.summary())
 #doc(nn.Conv2d)
 
 learn.lr_find(end_lr=100)
-
 learn.recorder.plot()
-
-
-
 learn.fit_one_cycle(10, 1e-02)
 
 #learn = cnn_learner(data, models.resnet34, metrics=accuracy)
-
 #print(learn.summary())
 
 learn.lr_find(end_lr=100)
-
 learn.recorder.plot()
-
 learn.fit_one_cycle(10,1e-04)
 
+
 learn.lr_find()
-
 learn.recorder.plot()
-
 learn.fit_one_cycle(10,1e-1)
 
+
 learn.lr_find()
-
 learn.recorder.plot()
-
 learn.fit_one_cycle(10,1e-01)
 
-interp = ClassificationInterpretation.from_learner(learn)
 
+
+
+interp = ClassificationInterpretation.from_learner(learn)
 interp.plot_confusion_matrix()
 
-from fastai.widgets import *
 
-data.classes
+
 
 img = open_image(path/'baseball.jpg')
 img
